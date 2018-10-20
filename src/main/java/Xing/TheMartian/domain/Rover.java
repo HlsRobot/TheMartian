@@ -10,11 +10,11 @@ public class Rover {
     private static final Logger LOGGER = Logger.getLogger( Rover.class.getName() );
 
     private Coordinates coordinates;
-    private char orientation;
+    private Orientation orientation;
 
     private Rover(final Coordinates coordinates, final char orientation) {
         this.coordinates = coordinates;
-        this.orientation = orientation;
+        this.orientation = Orientation.getByCode(orientation);
     }
 
     public Rover() {}
@@ -23,15 +23,15 @@ public class Rover {
         return coordinates;
     }
 
-    public char getOrientation() {
+    public Orientation getOrientation() {
         return orientation;
     }
 
     public void changeOrientation(final Command command) {
-        final char currentOrientation = Orientation.adjustOrientation(this.orientation, command).getOrientationCode();
-        if (currentOrientation == 'U') {
+        final Orientation currentOrientation = Orientation.adjustOrientation(this.orientation, command);
+        if (currentOrientation == Orientation.UNKNOWN) {
             LOGGER.warning("Due to harsh weather conditions the orientation was lost. Defaulting to NORTH");
-            this.orientation = Orientation.NORTH.getOrientationCode();
+            this.orientation = Orientation.NORTH;
         }
         this.orientation = currentOrientation;
     }

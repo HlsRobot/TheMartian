@@ -1,17 +1,20 @@
 package Xing.TheMartian;
 
-import Xing.TheMartian.domain.Coordinates;
-import Xing.TheMartian.domain.Rover;
+import Xing.TheMartian.Services.InputService;
+import Xing.TheMartian.Services.MartianService;
+import Xing.TheMartian.domain.InputDto;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class MartianRunner {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final InputService inputService = new InputService(br);
+        final InputDto inputDto = inputService.provideInitialInput();
         final MartianService martianService = new MartianService();
-        final Coordinates limitCoordinates = new Coordinates.Builder().x(5).y(5).build();
-        final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(3).y(3).build()).orientation('E').build();
-        final String commandLine = "MMRMMRMRRM";
-        martianService.startMartianApp(limitCoordinates, rover, commandLine);
-        System.out.println(rover.toString());
+        martianService.startMartianApp(inputDto);
     }
-
 }

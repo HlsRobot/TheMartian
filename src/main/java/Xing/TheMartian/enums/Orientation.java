@@ -1,7 +1,5 @@
 package Xing.TheMartian.enums;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-
 public enum Orientation {
     NORTH('N'), WEST('W'), SOUTH('S'), EAST('E'), UNKNOWN('U');
 
@@ -24,8 +22,8 @@ public enum Orientation {
         return UNKNOWN;
     }
 
-    public static Orientation adjustOrientation(final char initialOrientation, final Command command) {
-        switch (Orientation.getByCode(initialOrientation)) {
+    public static Orientation adjustOrientation(final Orientation initialOrientation, final Command command) {
+        switch (initialOrientation) {
             case NORTH:
                 if (command == Command.RIGHT) {
                     return EAST;
