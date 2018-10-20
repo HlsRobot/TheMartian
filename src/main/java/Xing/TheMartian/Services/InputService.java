@@ -66,11 +66,12 @@ public class InputService {
             for (int coordinate: coordinates) {
                 if (coordinate < 1 ) {
                     System.err.println("Please provide a value larger than 0");
+                    return this.handleMaxCoordinatesInput(br);
                 }
             }
             return new Coordinates.Builder().x(coordinates[0]).y(coordinates[1]).build();
         } catch (NumberFormatException nfe) {
-            System.err.println("Please provide integer values larger than 0 with empty space separated (e.g. 5 5).");
+            System.err.println("Please provide Integer values larger than 0 whitespace separated (e.g. 5 5).");
             return this.handleMaxCoordinatesInput(br);
         }
     }
@@ -95,7 +96,7 @@ public class InputService {
                     .y(Integer.parseInt(parts[1])).build();
             if (coordinates.getX() > limitCoordinates.getX() || coordinates.getY() > limitCoordinates.getY()) {
                 System.err.println(String.format(
-                        "please provide coordinates inside the limits of the plateau (Max value: (%d, %d)",
+                        "please provide coordinates inside the limits of the plateau (Max value: (%d, %d))",
                         limitCoordinates.getX(), limitCoordinates.getY()));
                 return this.handleRoverCoordinatesInput(br, limitCoordinates);
             }
@@ -109,9 +110,9 @@ public class InputService {
                 return this.handleRoverCoordinatesInput(br, limitCoordinates);
             }
             final char orientation = parts[2].charAt(0);
-            return new Rover.Builder().coordinates(coordinates).orientation(orientation).build();
+            return new Rover.Builder().coordinates(coordinates).orientation(Orientation.getByCode(orientation)).build();
         } catch (NumberFormatException nfe) {
-            System.err.println("Please provide integer values larger than 0 with empty space separated (e.g. 5 5 N).");
+            System.err.println("Please provide integer values larger than 0 whitespace separated followed by the orientation (e.g. 5 5 N).");
             return this.handleRoverCoordinatesInput(br, limitCoordinates);
         }
     }

@@ -2,19 +2,19 @@ package Xing.TheMartian.domain;
 
 import Xing.TheMartian.enums.Command;
 import Xing.TheMartian.enums.Orientation;
+import org.apache.log4j.Logger;
 
-import java.util.logging.Logger;
 
 public class Rover {
 
-    private static final Logger LOGGER = Logger.getLogger( Rover.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger(Rover.class);
 
     private Coordinates coordinates;
     private Orientation orientation;
 
-    private Rover(final Coordinates coordinates, final char orientation) {
+    private Rover(final Coordinates coordinates, final Orientation orientation) {
         this.coordinates = coordinates;
-        this.orientation = Orientation.getByCode(orientation);
+        this.orientation = orientation;
     }
 
     public Rover() {}
@@ -30,15 +30,16 @@ public class Rover {
     public void changeOrientation(final Command command) {
         final Orientation currentOrientation = Orientation.adjustOrientation(this.orientation, command);
         if (currentOrientation == Orientation.UNKNOWN) {
-            LOGGER.warning("Due to harsh weather conditions the orientation was lost. Defaulting to NORTH");
+            LOGGER.warn("Due to harsh weather conditions the orientation was lost. Defaulting to NORTH");
             this.orientation = Orientation.NORTH;
+        } else {
+            this.orientation = currentOrientation;
         }
-        this.orientation = currentOrientation;
     }
 
     public void moveNorth(final int maxY) {
         if (this.coordinates.getY() + 1 > maxY) {
-            LOGGER.warning("The obstacle avoidance module detected that we cannot move to the North");
+            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the North");
         } else {
             this.coordinates.setY(this.coordinates.getY() + 1);
         }
@@ -46,7 +47,7 @@ public class Rover {
 
     public void moveSouth() {
         if (this.coordinates.getY() - 1 < 0) {
-            LOGGER.warning("The obstacle avoidance module detected that we cannot move to the South");
+            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the South");
         } else {
             this.coordinates.setY(this.coordinates.getY() - 1);
         }
@@ -54,7 +55,7 @@ public class Rover {
 
     public void moveEast(final int maxX) {
         if (this.coordinates.getX() + 1 > maxX) {
-            LOGGER.warning("The obstacle avoidance module detected that we cannot move to the East");
+            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the East");
         } else {
             this.coordinates.setX(this.coordinates.getX() + 1);
         }
@@ -62,7 +63,7 @@ public class Rover {
 
     public void moveWest() {
         if (this.coordinates.getX() - 1 < 0) {
-            LOGGER.warning("The obstacle avoidance module detected that we cannot move to the West");
+            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the West");
         } else {
             this.coordinates.setX(this.coordinates.getX() - 1);
         }
@@ -70,19 +71,19 @@ public class Rover {
 
     @Override
     public String toString() {
-        return this.getCoordinates().getX() + " " + this.getCoordinates().getY() + " " + this.getOrientation();
+        return this.getCoordinates().getX() + " " + this.getCoordinates().getY() + " " + this.getOrientation().getOrientationCode();
     }
 
     public static class Builder {
         private Coordinates coordinates;
-        private char orientation;
+        private Orientation orientation;
 
         public Builder coordinates(final Coordinates coordinates) {
             this.coordinates = coordinates;
             return this;
         }
 
-        public Builder orientation(final char orientation) {
+        public Builder orientation(final Orientation orientation) {
             this.orientation = orientation;
             return this;
         }

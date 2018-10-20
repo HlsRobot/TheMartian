@@ -5,23 +5,28 @@ import Xing.TheMartian.domain.RoverCommand;
 import Xing.TheMartian.enums.Command;
 import Xing.TheMartian.domain.Coordinates;
 import Xing.TheMartian.domain.Rover;
+import org.apache.log4j.Logger;
 
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MartianService {
 
-    private static final Logger LOGGER = Logger.getLogger( MartianService.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger(MartianService.class);
 
     /**
      * Method that is called from the runner and is initializing the logic
      *
      * @param inputDto      The plateaus limits and a list of rovers and commands for each rover
      */
-    public void startMartianApp(final InputDto inputDto) {
+    public List<Rover> startMartianApp(final InputDto inputDto) {
+        final List<Rover> finalRoverList = new ArrayList<>();
         for (final RoverCommand roverCommand: inputDto.getRoverCommandList()) {
             this.executeCommands(inputDto.getLimitCoordinates(), roverCommand.getRover(), roverCommand.getCommandLine());
-            System.out.println(roverCommand.getRover());
+            finalRoverList.add(roverCommand.getRover());
         }
+        return finalRoverList;
     }
 
     /**
@@ -42,7 +47,7 @@ public class MartianService {
                     rover.changeOrientation(Command.getByCode(command));
                 }
             } else {
-                LOGGER.warning(String.format("Command %c was not recognized and was ignored", command));
+                LOGGER.warn(String.format("Command %c was not recognized and was ignored", command));
             }
         }
     }
