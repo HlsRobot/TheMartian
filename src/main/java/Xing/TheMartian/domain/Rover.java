@@ -37,36 +37,20 @@ public class Rover {
         }
     }
 
-    public void moveNorth(final int maxY) {
-        if (this.coordinates.getY() + 1 > maxY) {
-            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the North");
-        } else {
-            this.coordinates.setY(this.coordinates.getY() + 1);
-        }
+    public void moveNorth() {
+        this.coordinates.setY(this.coordinates.getY() + 1);
     }
 
     public void moveSouth() {
-        if (this.coordinates.getY() - 1 < 0) {
-            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the South");
-        } else {
-            this.coordinates.setY(this.coordinates.getY() - 1);
-        }
+        this.coordinates.setY(this.coordinates.getY() - 1);
     }
 
-    public void moveEast(final int maxX) {
-        if (this.coordinates.getX() + 1 > maxX) {
-            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the East");
-        } else {
-            this.coordinates.setX(this.coordinates.getX() + 1);
-        }
+    public void moveEast() {
+        this.coordinates.setX(this.coordinates.getX() + 1);
     }
 
     public void moveWest() {
-        if (this.coordinates.getX() - 1 < 0) {
-            LOGGER.warn("The obstacle avoidance module detected that we cannot move to the West");
-        } else {
-            this.coordinates.setX(this.coordinates.getX() - 1);
-        }
+        this.coordinates.setX(this.coordinates.getX() - 1);
     }
 
     @Override

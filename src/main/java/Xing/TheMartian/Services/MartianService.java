@@ -59,16 +59,32 @@ public class MartianService {
     private void moveRover(final Rover rover, final Coordinates limitCoordinates) {
         switch (rover.getOrientation()) {
             case NORTH:
-                rover.moveNorth(limitCoordinates.getY());
+                if (rover.getCoordinates().getY() + 1 > limitCoordinates.getY()) {
+                    LOGGER.warn("The obstacle avoidance module detected that we cannot move to the North");
+                } else {
+                    rover.moveNorth();
+                }
                 break;
             case WEST:
-                rover.moveWest();
+                if (rover.getCoordinates().getX() - 1 < 0) {
+                    LOGGER.warn("The obstacle avoidance module detected that we cannot move to the West");
+                } else {
+                    rover.moveWest();
+                }
                 break;
             case SOUTH:
-                rover.moveSouth();
+                if (rover.getCoordinates().getY() - 1 < 0) {
+                    LOGGER.warn("The obstacle avoidance module detected that we cannot move to the South");
+                } else {
+                    rover.moveSouth();
+                }
                 break;
             case EAST:
-                rover.moveEast(limitCoordinates.getX());
+                if (rover.getCoordinates().getX() + 1 > limitCoordinates.getX()) {
+                    LOGGER.warn("The obstacle avoidance module detected that we cannot move to the East");
+                } else {
+                    rover.moveEast();
+                }
                 break;
             default:
                 break;

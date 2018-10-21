@@ -3,10 +3,7 @@ package Xing.TheMartian.domain;
 import Xing.TheMartian.enums.Command;
 import Xing.TheMartian.enums.Orientation;
 import org.apache.log4j.Appender;
-import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,18 +66,8 @@ public class RoverTest {
     @Test
     public void moveNorthSuccessTest() {
         final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(5).y(5).build()).build();
-        rover.moveNorth(6);
+        rover.moveNorth();
         assertEquals(6, rover.getCoordinates().getY());
-    }
-
-    @Test
-    public void moveNorthFailTest() {
-        final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(5).y(5).build()).build();
-        rover.moveNorth(5);
-        assertEquals(5, rover.getCoordinates().getY());
-        verify(this.mockAppender).doAppend(captorLoggingEvent.capture());
-        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
-        assertEquals("The obstacle avoidance module detected that we cannot move to the North", loggingEvent.getMessage());
     }
 
     @Test
@@ -91,30 +78,10 @@ public class RoverTest {
     }
 
     @Test
-    public void moveSouthFailTest() {
-        final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(5).y(0).build()).build();
-        rover.moveSouth();
-        assertEquals(0, rover.getCoordinates().getY());
-        verify(this.mockAppender).doAppend(captorLoggingEvent.capture());
-        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
-        assertEquals("The obstacle avoidance module detected that we cannot move to the South", loggingEvent.getMessage());
-    }
-
-    @Test
     public void moveEastSuccessTest() {
         final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(5).y(5).build()).build();
-        rover.moveEast(6);
+        rover.moveEast();
         assertEquals(6, rover.getCoordinates().getX());
-    }
-
-    @Test
-    public void moveEastFailTest() {
-        final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(5).y(5).build()).build();
-        rover.moveEast(5);
-        assertEquals(5, rover.getCoordinates().getX());
-        verify(this.mockAppender).doAppend(captorLoggingEvent.capture());
-        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
-        assertEquals("The obstacle avoidance module detected that we cannot move to the East", loggingEvent.getMessage());
     }
 
     @Test
@@ -122,16 +89,6 @@ public class RoverTest {
         final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(1).y(1).build()).build();
         rover.moveWest();
         assertEquals(0, rover.getCoordinates().getX());
-    }
-
-    @Test
-    public void moveWestFailTest() {
-        final Rover rover = new Rover.Builder().coordinates(new Coordinates.Builder().x(0).y(0).build()).build();
-        rover.moveWest();
-        assertEquals(0, rover.getCoordinates().getX());
-        verify(this.mockAppender).doAppend(captorLoggingEvent.capture());
-        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
-        assertEquals("The obstacle avoidance module detected that we cannot move to the West", loggingEvent.getMessage());
     }
 
     @Test

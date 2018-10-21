@@ -15,7 +15,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,28 +69,60 @@ public class MartianServiceTest {
 
     @Test
     public void startMartianAppWithFaultyCommandsTest() {
-        final List<RoverCommand> roverCommandList = new ArrayList<>();
-        roverCommandList.add(new RoverCommand.Builder().
-                rover(new Rover.Builder()
-                        .coordinates(new Coordinates.Builder().x(1).y(2).build())
-                        .orientation(Orientation.NORTH).build())
-                .commandLine("abcLMLMLMLMM").build());
-
-        final InputDto inputDto = new InputDto.Builder()
-                .limitCoordinates(new Coordinates.Builder().x(5).y(5).build())
-                .roverCommandList(roverCommandList)
-                .build();
+        final InputDto inputDto = this.inputDtoFactory(6, 6, 1, 2, Orientation.NORTH, "abcLMLMLMLMM");
         this.martianService.startMartianApp(inputDto);
         verify(this.mockAppender, times(3)).doAppend(captorLoggingEvent.capture());
         List<LoggingEvent> loggingEventList = captorLoggingEvent.getAllValues();
-        assertTrue(loggingEventList.stream().anyMatch(loggingEvent -> loggingEvent.getRenderedMessage().contains("Command a was not recognized and was ignored")));
-        assertTrue(loggingEventList.stream().anyMatch(loggingEvent -> loggingEvent.getRenderedMessage().contains("Command b was not recognized and was ignored")));
-        assertTrue(loggingEventList.stream().anyMatch(loggingEvent -> loggingEvent.getRenderedMessage().contains("Command c was not recognized and was ignored")));
+        assertTrue(loggingEventList.stream().anyMatch(
+                loggingEvent -> loggingEvent.getRenderedMessage().contains("Command a was not recognized and was ignored")));
+        assertTrue(loggingEventList.stream().anyMatch(
+                loggingEvent -> loggingEvent.getRenderedMessage().contains("Command b was not recognized and was ignored")));
+        assertTrue(loggingEventList.stream().anyMatch(
+                loggingEvent -> loggingEvent.getRenderedMessage().contains("Command c was not recognized and was ignored")));
     }
 
+    @Test
+    public void moveRoverNorthFailTest() {
+        final InputDto inputDto = this.inputDtoFactory(5, 5, 0, 5, Orientation.NORTH, "M");
+        final List<Rover> roverList = this.martianService.startMartianApp(inputDto);
+        verify(this.mockAppender, times(1)).doAppend(captorLoggingEvent.capture());
+        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
+        assertTrue(loggingEvent.getRenderedMessage().contains("The obstacle avoidance module detected that we cannot move to the North"));
+        assertEquals(inputDto.getRoverCommandList().get(0).getRover().getCoordinates().getY(), roverList.get(0).getCoordinates().getY());
+    }
 
-    private InputDto inputDtoFactoryForMaxCoordinates(final int maxX, final int maxY, final int roverX, final int roverY,
-                                                      final Orientation orientation, final String commands) {
+    @Test
+    public void moveRoverSouthFailTest() {
+        final InputDto inputDto = this.inputDtoFactory(5, 5, 0, 0, Orientation.SOUTH, "M");
+        final List<Rover> roverList = this.martianService.startMartianApp(inputDto);
+        verify(this.mockAppender, times(1)).doAppend(captorLoggingEvent.capture());
+        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
+        assertTrue(loggingEvent.getRenderedMessage().contains("The obstacle avoidance module detected that we cannot move to the South"));
+        assertEquals(inputDto.getRoverCommandList().get(0).getRover().getCoordinates().getY(), roverList.get(0).getCoordinates().getY());
+    }
+
+    @Test
+    public void moveRoverEastFailTest() {
+        final InputDto inputDto = this.inputDtoFactory(5, 5, 5, 0, Orientation.EAST, "M");
+        final List<Rover> roverList = this.martianService.startMartianApp(inputDto);
+        verify(this.mockAppender, times(1)).doAppend(captorLoggingEvent.capture());
+        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
+        assertTrue(loggingEvent.getRenderedMessage().contains("The obstacle avoidance module detected that we cannot move to the East"));
+        assertEquals(inputDto.getRoverCommandList().get(0).getRover().getCoordinates().getX(), roverList.get(0).getCoordinates().getX());
+    }
+
+    @Test
+    public void moveRoverWestFailTest() {
+        final InputDto inputDto = this.inputDtoFactory(5, 5, 0, 0, Orientation.WEST, "M");
+        final List<Rover> roverList = this.martianService.startMartianApp(inputDto);
+        verify(this.mockAppender, times(1)).doAppend(captorLoggingEvent.capture());
+        LoggingEvent loggingEvent = captorLoggingEvent.getValue();
+        assertTrue(loggingEvent.getRenderedMessage().contains("The obstacle avoidance module detected that we cannot move to the West"));
+        assertEquals(inputDto.getRoverCommandList().get(0).getRover().getCoordinates().getX(), roverList.get(0).getCoordinates().getX());
+    }
+
+    private InputDto inputDtoFactory(final int maxX, final int maxY, final int roverX, final int roverY,
+                                     final Orientation orientation, final String commands) {
         return new InputDto.Builder()
                 .limitCoordinates(new Coordinates.Builder().x(maxX).y(maxY).build())
                 .roverCommandList(Collections.singletonList(
@@ -102,5 +133,4 @@ public class MartianServiceTest {
                                 .commandLine(commands).build()))
                 .build();
     }
-
 }
