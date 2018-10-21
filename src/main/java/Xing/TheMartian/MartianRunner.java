@@ -1,7 +1,7 @@
 package Xing.TheMartian;
 
-import Xing.TheMartian.services.InputService;
-import Xing.TheMartian.services.MartianService;
+import Xing.TheMartian.service.InputService;
+import Xing.TheMartian.service.MartianService;
 import Xing.TheMartian.domain.InputDto;
 import Xing.TheMartian.domain.Rover;
 

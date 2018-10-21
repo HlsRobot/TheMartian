@@ -1,10 +1,11 @@
-package Xing.TheMartian.services;
+package Xing.TheMartian.service;
 
 import Xing.TheMartian.domain.Coordinates;
 import Xing.TheMartian.domain.InputDto;
 import Xing.TheMartian.domain.Rover;
 import Xing.TheMartian.domain.RoverCommand;
 import Xing.TheMartian.enums.Orientation;
+import Xing.TheMartian.service.MartianService;
 import org.apache.log4j.Appender;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.spi.LoggingEvent;

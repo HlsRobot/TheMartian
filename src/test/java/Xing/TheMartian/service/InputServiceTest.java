@@ -1,7 +1,8 @@
-package Xing.TheMartian.services;
+package Xing.TheMartian.service;
 
 import Xing.TheMartian.domain.InputDto;
 import Xing.TheMartian.enums.Orientation;
+import Xing.TheMartian.service.InputService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

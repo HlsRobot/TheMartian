@@ -1,4 +1,4 @@
-package Xing.TheMartian.services;
+package Xing.TheMartian.service;
 
 import Xing.TheMartian.domain.Coordinates;
 import Xing.TheMartian.domain.InputDto;
